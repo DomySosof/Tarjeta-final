@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Presupuesto Personal con Tarjeta (SQLite)</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+</head>
+<body>
+    <header>
+        <h1>Tarjeta de Credito💰</h1>
+    </header>
+
+    <main>
+        
+        <section class="tarjeta-config">
+            <h2>Gestión y Configuración de Tarjetas</h2>
+            <button id="btn-mostrar-config">Ocultar Configuración</button>
+
+            <div class="tarjeta-config-area visible" id="config-area">
+                
+                <h4>Configurar Tarjetas Existentes:</h4>
+                <div id="tarjetas-existentes-config" class="tarjetas-existentes-config">
+                    </div>
+
+                <h4>Agregar/Editar Tarjeta:</h4>
+                <form id="formulario-tarjeta">
+                    <input type="text" id="tarjeta-id-config" placeholder="ID corto (ej: VISA)" required maxlength="4">
+                    <input type="text" id="nombre-tarjeta" placeholder="Nombre (ej: VISA Platino)" required>
+                    <input type="color" id="color-tarjeta" value="#3498db" title="Selecciona Color">
+                    <input type="number" id="limite-tarjeta" placeholder="Límite Total" required min="1" step="0.01">
+                    <div class="fechas">
+                        <label for="fecha-corte">Día de Corte (1-31):</label>
+                        <input type="number" id="fecha-corte" required min="1" max="31">
+                        <label for="fecha-pago">Día de Pago (1-31):</label>
+                        <input type="number" id="fecha-pago" required min="1" max="31">
+                    </div>
+                    <button type="submit" id="btn-guardar-tarjeta">Guardar/Crear Tarjeta</button>
+                </form>
+            </div>
+        </section>
+        
+        <section class="historial">
+            <h3 class="cuotas-titulo">Pagos de Tarjeta Programados (Línea de Tiempo)</h3>
+            
+            <div class="grafica-contenedor-linea">
+                <canvas id="graficoPagosMensuales"></canvas>
+            </div>
+        </section>
+        
+        <section class="registro">
+            <h2 style="display: inline-block;">Registrar Movimiento</h2>
+            
+            <button id="btn-mostrar-registro" style="float: right;">➕ Abrir Formulario</button>
+            <div style="clear: both;"></div>
+            
+            <div id="registro-area" class="registro-area">
+                <form id="formulario-transaccion">
+                    <select id="tipo" required>
+                        <option value="ingreso">Ingreso (+)</option>
+                        <option value="gasto">Gasto (-)</option>
+                    </select>
+                    <input type="number" id="valor" placeholder="Valor (ej: 150.00)" required min="0.01" step="0.01">
+                    <input type="text" id="descripcion" placeholder="Descripción (ej: Salario, Almuerzo)" required>
+                    <select id="categoria" required>
+                        <option value="" disabled selected>Selecciona Categoría</option>
+                        <option value="salario">Salario</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="transporte">Transporte</option>
+                        <option option value="vivienda">Vivienda</option>
+                        <option value="ocio">Ocio</option>
+                        <option value="deudas">Deudas</option>
+                    </select>
+                    
+                    <select id="cuenta-tipo">
+                        <option value="debito">Efectivo / Débito</option>
+                        </select>
+                    
+                    <input type="number" id="cuotas" placeholder="# Cuotas (Ej: 1)" value="1" min="1">
+                    
+                    <button type="submit">Agregar</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="resumen">
+            <h2>Resumen Financiero</h2>
+            <div class="indicadores">
+                <div class="indicador ingresos">
+                    <h3>Total Ingresos (Débito)</h3>
+                    <p class="valor" id="total-ingresos">$0.00</p>
+                </div>
+                <div class="indicador gastos-cuotas">
+                    <h3>Deuda Total Pendiente</h3>
+                    <p class="valor" id="total-gasto-cuotas">$0.00</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 20px;">Estado de Tarjetas de Crédito</h3>
+            <div id="tarjetas-resumen">
+                </div>
+            
+            <h3 style="margin-top: 20px;">Uso de Límite por Tarjeta</h3>
+            <div class="graficos-dona-contenedor" id="graficos-dona-contenedor">
+                </div>
+        </section>
+        
+        <section class="historial-listas">
+            <h2>Historial y Detalle de Pagos</h2>
+            
+            <h4 style="margin-top: 15px;">Detalle de Cuotas Pendientes</h4>
+            <div class="historial-scroll-box">
+                <ul id="lista-cuotas">
+                    </ul>
+            </div>
+
+            <h4 style="margin-top: 15px;">Historial de Movimientos (Débito)</h4>
+            <div class="historial-scroll-box">
+                <ul id="lista-transacciones">
+                    </ul>
+            </div>
+        </section>
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
